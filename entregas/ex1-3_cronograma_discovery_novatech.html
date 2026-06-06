@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cronograma Discovery — Assistente de IA NovaTech</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  background: #ffffff;
+  color: #111827;
+  padding: 28px 32px 36px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.header { margin-bottom: 20px; border-bottom: 2px solid #111827; padding-bottom: 12px; }
+.title { font-size: 20px; font-weight: 700; color: #111827; }
+.subtitle { font-size: 12px; color: #6b7280; margin-top: 4px; }
+.meta { display: flex; gap: 20px; margin-top: 8px; font-size: 11px; color: #6b7280; }
+.meta span { display: flex; align-items: center; gap: 4px; }
+
+.legend {
+  display: flex; flex-wrap: wrap; gap: 10px 20px;
+  margin-bottom: 16px;
+  padding: 9px 12px;
+  background: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #374151; font-weight: 500; }
+.legend-swatch { width: 11px; height: 11px; border-radius: 2px; flex-shrink: 0; }
+.legend-diamond { width: 10px; height: 10px; transform: rotate(45deg); border-radius: 1px; flex-shrink: 0; }
+
+table { border-collapse: collapse; width: 100%; }
+.col-label { width: 220px; min-width: 200px; }
+.col-day { min-width: 56px; }
+
+.week-row th {
+  padding: 5px 0;
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  text-align: center;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+.w1-th { color: #6D28D9; background: rgba(109,40,217,0.07); }
+.w2-th { color: #1D4ED8; background: rgba(29,78,216,0.07); }
+.corner-th { background: transparent; border: none; }
+
+.day-hdr th {
+  padding: 4px 2px 6px;
+  text-align: center;
+  font-size: 10px;
+  color: #9ca3af;
+  font-weight: 500;
+  border-bottom: 2px solid #e5e7eb;
+}
+.day-hdr .label-th {
+  text-align: left;
+  font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: #9ca3af;
+  padding-left: 0;
+}
+
+.phase-sep td {
+  padding: 6px 0 3px;
+  border-top: 1px solid #e5e7eb;
+}
+.phase-label {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 2px 10px; border-radius: 4px;
+  font-size: 9.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.09em;
+}
+
+.act-row { border-bottom: 1px solid #f3f4f6; }
+.act-row:hover { background: #fafafa; }
+
+.label-cell { padding: 6px 10px 6px 0; vertical-align: middle; }
+.act-num { color: #9ca3af; font-size: 10px; font-weight: 400; }
+.act-name { font-size: 11.5px; font-weight: 500; color: #111827; display: block; line-height: 1.4; }
+.act-owner {
+  font-size: 9.5px; font-weight: 600;
+  display: inline-flex; align-items: center;
+  padding: 1px 7px; border-radius: 3px; margin-top: 3px;
+}
+.act-dep { font-size: 9.5px; color: #9ca3af; margin-top: 2px; display: block; }
+
+.day-cell {
+  padding: 0 1px;
+  vertical-align: middle;
+  height: 46px;
+  border-left: 1px solid #f3f4f6;
+}
+.week-sep { border-left: 2px solid #e5e7eb !important; }
+
+.bar { height: 20px; width: 100%; display: flex; align-items: center; justify-content: center; }
+.bar-s  { border-radius: 5px 0 0 5px; margin-left: 2px; width: calc(100% - 2px); }
+.bar-e  { border-radius: 0 5px 5px 0; margin-right: 2px; width: calc(100% - 2px); }
+.bar-m  { border-radius: 0; }
+.bar-1  { border-radius: 5px; margin: 0 4px; width: calc(100% - 8px); }
+.bar-mi { width: 17px; height: 17px; transform: rotate(45deg); border-radius: 2px; margin: 0 auto; flex-shrink: 0; }
+
+.deps-block {
+  margin-top: 20px;
+  padding: 12px 14px;
+  background: #f9fafb;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+}
+.deps-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; margin-bottom: 8px; }
+.deps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 24px; }
+.dep-item { font-size: 11.5px; color: #374151; padding: 2px 0; }
+
+.risk-block {
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: #fff7ed;
+  border-radius: 6px;
+  border: 1px solid #fed7aa;
+  font-size: 11.5px;
+  color: #9a3412;
+}
+.risk-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+
+.footer { margin-top: 18px; font-size: 10px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 8px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1 class="title">Cronograma de Discovery — Assistente de IA NovaTech</h1>
+  <p class="subtitle">DB1 Global Software (DGS) · Elaborado pelo Delivery Manager</p>
+  <div class="meta">
+    <span>📅 Início previsto: a definir</span>
+    <span>⏱ Duração: 10 dias úteis (2 semanas)</span>
+    <span>📋 Versão: 1.0 · 2026-06-06</span>
+  </div>
+</div>
+
+<div class="legend" id="leg"></div>
+
+<table id="gantt"></table>
+
+<div class="deps-block">
+  <div class="deps-title">Dependências Críticas</div>
+  <div class="deps-grid" id="deps"></div>
+</div>
+
+<div class="risk-block">
+  <div class="risk-title">⚠ Risco Principal a Monitorar</div>
+  A Intent vai encontrar contradições que nenhuma área da NovaTech se sente "dona" de resolver.
+  O Workshop de Curadoria (Dia 9) é o momento de forçar essa decisão. Se não houver processo de
+  governança documental, o RAG degrada em 3 meses — isso deve entrar no escopo como requisito
+  não-funcional.
+</div>
+
+<div class="footer">
+  [RASCUNHO — revisar antes de compartilhar] · DB1 Global Software · Projeto: Assistente de IA NovaTech
+</div>
+
+<script>
+const C = {
+  ia:        { bar: '#7C3AED', light: '#EDE9FE', text: '#5B21B6', label: 'Agentes IA' },
+  novatech:  { bar: '#D97706', light: '#FEF3C7', text: '#92400E', label: 'NovaTech' },
+  dm:        { bar: '#2563EB', light: '#DBEAFE', text: '#1E40AF', label: 'DM (Delivery Manager)' },
+  ps:        { bar: '#0D9488', light: '#CCFBF1', text: '#065F46', label: 'PS + Tech Lead' },
+  joint:     { bar: '#16A34A', light: '#DCFCE7', text: '#14532D', label: 'DM + PS' },
+  milestone: { bar: '#DC2626', light: '#FEE2E2', text: '#991B1B', label: 'Marco / Entrega' },
+};
+
+const acts = [
+  { phase: 1, label: 'FASE 1 — INTENT  (Agentes de IA)', color: '#6D28D9' },
+  { id:1,  name:'Acesso às fontes concedido',        owner:'NovaTech',       key:'novatech',  start:1,  end:1,  dep:'— pré-requisito: destravado pela NovaTech no Dia 1' },
+  { id:2,  name:'Catalogação e inventário da base',  owner:'Agentes IA',     key:'ia',        start:1,  end:4,  dep:'↳ após #1  |  SharePoint ~800 docs, Confluence ~400 págs, rede ~50 planilhas' },
+  { id:3,  name:'Detecção de contradições',          owner:'Agentes IA',     key:'ia',        start:1,  end:4,  dep:'↳ após #1  |  documentos com versões conflitantes' },
+  { id:4,  name:'Mapeamento de cobertura temática',  owner:'Agentes IA',     key:'ia',        start:1,  end:4,  dep:'↳ após #1  |  cruzar temas com categorias de chamados' },
+  { id:5,  name:'Análise de qualidade documental',   owner:'Agentes IA',     key:'ia',        start:1,  end:4,  dep:'↳ após #1  |  OCR, fórmulas, links quebrados' },
+  { id:6,  name:'Geração do mapa de gaps',           owner:'Agentes IA',     key:'ia',        start:3,  end:4,  dep:'↳ após #2–5  |  top 10–15 docs críticos + dependências' },
+  { id:7,  name:'Mobilização e agendamento',         owner:'DM',             key:'dm',        start:1,  end:4,  dep:'paralelo à Intent  |  selecionar 6–8 atendentes, agendar áreas' },
+  { id:8,  name:'Entrega: Relatório Intent',         owner:'Marco',          key:'milestone', start:4,  end:4,  dep:'↳ após #6  |  relatório estruturado entregue ao time', milestone:true },
+  { phase: 2, label: 'FASE 2 — DISCOVERY HUMANO', color: '#1D4ED8' },
+  { id:9,  name:'Validação do mapa de gaps',         owner:'PS + Tech Lead', key:'ps',        start:5,  end:5,  dep:'↳ após #8  |  revisar contradições c/ Operações NovaTech' },
+  { id:10, name:'Entrevistas c/ atendentes (6–8)',   owner:'PS + DM',        key:'joint',     start:6,  end:7,  dep:'↳ após #9  |  casos de uso reais, freq. e criticidade' },
+  { id:11, name:'Entrevistas c/ supervisores',       owner:'DM',             key:'dm',        start:8,  end:8,  dep:'↳ após #10  |  chamados críticos, erros de informação passados' },
+  { id:12, name:'Workshop de curadoria',             owner:'PS + Tech Lead', key:'ps',        start:9,  end:9,  dep:'↳ após #8 + #11  |  Ops, Compliance, Comercial — decisões de versionamento' },
+  { id:13, name:'Priorização e escopo MVP',          owner:'DM + PS',        key:'joint',     start:10, end:10, dep:'↳ após #10–12  |  escopo documentado + aceite diretoria NovaTech', milestone:true },
+];
+
+const deps = [
+  '↳ #1 Acesso às fontes → Intent agents iniciam (Dia 1)',
+  '↳ #8 Relatório Intent → Validação mapa de gaps (Dia 5)',
+  '↳ #9 Validação → Entrevistas com atendentes (Dia 6)',
+  '↳ #10–12 Entrevistas + Workshop → Priorização MVP (Dia 10)',
+];
+
+// Legend
+const legEl = document.getElementById('leg');
+Object.entries(C).forEach(([k,v]) => {
+  const shape = k === 'milestone'
+    ? `<div class="legend-diamond" style="background:${v.bar}"></div>`
+    : `<div class="legend-swatch" style="background:${v.bar}"></div>`;
+  legEl.innerHTML += `<div class="legend-item">${shape}<span>${v.label}</span></div>`;
+});
+
+// Deps
+const depEl = document.getElementById('deps');
+deps.forEach(d => { depEl.innerHTML += `<div class="dep-item">${d}</div>`; });
+
+// Gantt
+const days = [1,2,3,4,5,6,7,8,9,10];
+const dayN = ['Seg','Ter','Qua','Qui','Sex','Seg','Ter','Qua','Qui','Sex'];
+
+let html = `<thead>
+  <tr class="week-row">
+    <th class="col-label corner-th"></th>
+    <th colspan="5" class="w1-th">SEMANA 1 &nbsp;·&nbsp; DIAS 1–5</th>
+    <th colspan="5" class="w2-th">SEMANA 2 &nbsp;·&nbsp; DIAS 6–10</th>
+  </tr>
+  <tr class="day-hdr">
+    <th class="col-label label-th">Atividade</th>
+    ${days.map((d,i) => `<th class="col-day">${dayN[i]}<br><b>D${d}</b></th>`).join('')}
+  </tr>
+</thead><tbody>`;
+
+acts.forEach(act => {
+  if (act.phase) {
+    html += `<tr class="phase-sep">
+      <td colspan="11">
+        <span class="phase-label" style="color:${act.color};background:${act.color}18;">${act.label}</span>
+      </td>
+    </tr>`;
+    return;
+  }
+
+  const c = C[act.key];
+  html += `<tr class="act-row">
+    <td class="label-cell">
+      <span class="act-name">
+        <span class="act-num">#${act.id} </span>${act.name}${act.milestone ? ' ✦' : ''}
+      </span>
+      <span class="act-owner" style="background:${c.light};color:${c.text};">${act.owner}</span>
+      <span class="act-dep">${act.dep}</span>
+    </td>`;
+
+  days.forEach((d,i) => {
+    const active = d >= act.start && d <= act.end;
+    const isSep = i === 5;
+    let inner = '';
+
+    if (active) {
+      if (act.milestone) {
+        inner = `<div class="bar-mi" style="background:${c.bar};"></div>`;
+      } else {
+        const single = act.start === act.end;
+        const cls = single ? 'bar bar-1'
+          : d === act.start ? 'bar bar-s'
+          : d === act.end   ? 'bar bar-e'
+          : 'bar bar-m';
+        inner = `<div class="${cls}" style="background:${c.bar};opacity:0.9;"></div>`;
+      }
+    }
+
+    html += `<td class="day-cell${isSep ? ' week-sep' : ''}">${inner}</td>`;
+  });
+
+  html += `</tr>`;
+});
+
+html += '</tbody>';
+document.getElementById('gantt').innerHTML = html;
+</script>
+
+</body>
+</html>

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist NovaTech — Discovery Assistente de IA</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  background: #ffffff;
+  color: #111827;
+  padding: 28px 32px 36px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.page-header { border-bottom: 2px solid #111827; padding-bottom: 12px; margin-bottom: 24px; }
+.page-title { font-size: 20px; font-weight: 700; }
+.page-subtitle { font-size: 12px; color: #6b7280; margin-top: 4px; }
+.page-meta { display: flex; gap: 20px; margin-top: 8px; font-size: 11px; color: #6b7280; }
+
+.intro {
+  padding: 10px 14px;
+  background: #F9FAFB;
+  border-radius: 6px;
+  border-left: 3px solid #6D28D9;
+  font-size: 12px;
+  color: #374151;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.section { margin-bottom: 24px; }
+.section-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid;
+}
+.section-icon { font-size: 16px; }
+.section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; }
+.section-count { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  text-align: left; font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: #6b7280; padding: 0 10px 6px;
+  border-bottom: 1px solid #e5e7eb;
+}
+tbody tr { border-bottom: 1px solid #f3f4f6; }
+tbody tr:hover { background: #fafafa; }
+td { padding: 10px; vertical-align: top; }
+
+.day-badge {
+  font-size: 11px; font-weight: 700;
+  padding: 3px 8px; border-radius: 4px;
+  text-align: center; white-space: nowrap;
+  display: inline-block;
+}
+.item-name { font-size: 12px; font-weight: 600; color: #111827; line-height: 1.4; }
+.item-detail { font-size: 11px; color: #6b7280; margin-top: 3px; line-height: 1.5; }
+.item-why { font-size: 11px; color: #374151; line-height: 1.5; }
+.urgency {
+  font-size: 9.5px; font-weight: 700;
+  padding: 2px 7px; border-radius: 3px;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  display: inline-block; white-space: nowrap;
+}
+
+/* Colors access */
+.sec-access .section-header { border-color: #D97706; }
+.sec-access .section-title { color: #D97706; }
+.sec-access .section-count { background: #FEF3C7; color: #92400E; }
+.sec-access .day-badge { background: #FDE68A; color: #78350F; }
+.sec-access tbody tr:hover { background: #FFFBEB; }
+
+/* Colors people */
+.sec-people .section-header { border-color: #2563EB; }
+.sec-people .section-title { color: #2563EB; }
+.sec-people .section-count { background: #DBEAFE; color: #1E40AF; }
+.sec-people .day-badge { background: #BFDBFE; color: #1E40AF; }
+.sec-people tbody tr:hover { background: #EFF6FF; }
+
+/* Colors data */
+.sec-data .section-header { border-color: #0D9488; }
+.sec-data .section-title { color: #0D9488; }
+.sec-data .section-count { background: #CCFBF1; color: #065F46; }
+.sec-data .day-badge { background: #99F6E4; color: #065F46; }
+.sec-data tbody tr:hover { background: #F0FDFA; }
+
+.urg-critico { background: #FEE2E2; color: #DC2626; }
+.urg-importante { background: #FEF9C3; color: #854D0E; }
+.urg-agendar { background: #F3F4F6; color: #6b7280; }
+
+.summary {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  margin-top: 8px; margin-bottom: 20px;
+  padding: 14px;
+  background: #f9fafb; border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  text-align: center;
+}
+.sum-val { font-size: 28px; font-weight: 800; }
+.sum-label { font-size: 11px; color: #6b7280; margin-top: 2px; line-height: 1.4; }
+.s1 .sum-val { color: #D97706; }
+.s2 .sum-val { color: #2563EB; }
+.s3 .sum-val { color: #0D9488; }
+
+.alert {
+  padding: 10px 14px; border-radius: 6px;
+  background: #FFF7ED; border: 1px solid #FED7AA;
+  font-size: 12px; color: #9A3412; line-height: 1.6;
+  margin-bottom: 14px;
+}
+.alert-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+
+.footer { margin-top: 20px; font-size: 10px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 10px; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1 class="page-title">Checklist NovaTech — O que precisa ser fornecido</h1>
+  <p class="page-subtitle">Discovery · Assistente de IA para Atendimento ao Cliente · DB1 Global Software</p>
+  <div class="page-meta">
+    <span>📅 2026-06-06</span>
+    <span>📋 Versão 1.0</span>
+    <span>🎯 Referência para kickoff com NovaTech</span>
+  </div>
+</div>
+
+<p class="intro">
+  Tudo listado abaixo é bloqueante: sem os acessos do Dia 1, os agentes de Intent não iniciam.
+  Sem os dados do Dia 3, a seleção de atendentes fica sem critério. Sem as pessoas disponíveis
+  nos dias certos, as entrevistas e o workshop não acontecem. Levar este checklist para o kickoff
+  e obter comprometimento explícito da NovaTech para cada item.
+</p>
+
+<div class="summary">
+  <div class="s1">
+    <div class="sum-val">3</div>
+    <div class="sum-label">Acessos<br>todos necessários no Dia 1</div>
+  </div>
+  <div class="s2">
+    <div class="sum-val">4</div>
+    <div class="sum-label">Blocos de pessoas<br>Dias 1, 6–7, 8 e 9</div>
+  </div>
+  <div class="s3">
+    <div class="sum-val">2</div>
+    <div class="sum-label">Dados e informações<br>ambos necessários no Dia 3</div>
+  </div>
+</div>
+
+<!-- ACESSOS -->
+<div class="section sec-access">
+  <div class="section-header">
+    <span class="section-icon">🔑</span>
+    <span class="section-title">Acessos</span>
+    <span class="section-count">3 itens · todos no Dia 1</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:90px">Quando</th>
+        <th>O que</th>
+        <th>Para quê</th>
+        <th style="width:90px">Prioridade</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="day-badge">Dia 1</span></td>
+        <td>
+          <div class="item-name">Leitura ao SharePoint</div>
+          <div class="item-detail">~800 documentos · permissão de leitura para agentes automatizados</div>
+        </td>
+        <td class="item-why">Agentes de Intent varrem e catalogam toda a base documental</td>
+        <td><span class="urgency urg-critico">Crítico</span></td>
+      </tr>
+      <tr>
+        <td><span class="day-badge">Dia 1</span></td>
+        <td>
+          <div class="item-name">Leitura ao Confluence</div>
+          <div class="item-detail">~400 páginas · incluindo páginas com macros customizadas</div>
+        </td>
+        <td class="item-why">Catalogação e análise de qualidade — páginas com links quebrados ou macros impedem extração</td>
+        <td><span class="urgency urg-critico">Crítico</span></td>
+      </tr>
+      <tr>
+        <td><span class="day-badge">Dia 1</span></td>
+        <td>
+          <div class="item-name">Acesso à pasta de rede</div>
+          <div class="item-detail">~50 planilhas · algumas com fórmulas interdependentes</div>
+        </td>
+        <td class="item-why">Análise de qualidade documental — planilhas com fórmulas exigem tratamento especial para RAG</td>
+        <td><span class="urgency urg-critico">Crítico</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- PESSOAS -->
+<div class="section sec-people">
+  <div class="section-header">
+    <span class="section-icon">👥</span>
+    <span class="section-title">Pessoas</span>
+    <span class="section-count">4 itens · Dias 1, 6–7, 8 e 9</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:90px">Quando</th>
+        <th>Quem</th>
+        <th>Para quê</th>
+        <th style="width:90px">Prioridade</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="day-badge">Dia 1</span></td>
+        <td>
+          <div class="item-name">1 ponto de contato para curadoria documental</div>
+          <div class="item-detail">Disponível ao longo de toda a Fase 1 para responder dúvidas pontuais</div>
+        </td>
+        <td class="item-why">Referência para contradições encontradas pelos agentes — responder perguntas como "qual versão do POL-001 prevalece?"</td>
+        <td><span class="urgency urg-critico">Crítico</span></td>
+      </tr>
+      <tr>
+        <td><span class="day-badge">Dias 6–7</span></td>
+        <td>
+          <div class="item-name">6–8 atendentes experientes</div>
+          <div class="item-detail">Selecionados da lista de 45 · ~1h por atendente · entrevista semiestruturada</div>
+        </td>
+        <td class="item-why">Mapeamento de casos de uso reais: quais docs consultam, onde perdem tempo, quando escalam ao supervisor</td>
+        <td><span class="urgency urg-importante">Importante</span></td>
+      </tr>
+      <tr>
+        <td><span class="day-badge">Dia 8</span></td>
+        <td>
+          <div class="item-name">Supervisores e gestores de atendimento</div>
+          <div class="item-detail">Responsáveis por chamados críticos e por comunicar mudanças de regra ao time</div>
+        </td>
+        <td class="item-why">Critérios de priorização: chamados de maior impacto ao cliente, erros de informação que geraram reclamações formais</td>
+        <td><span class="urgency urg-importante">Importante</span></td>
+      </tr>
+      <tr>
+        <td><span class="day-badge">Dia 9</span></td>
+        <td>
+          <div class="item-name">1 representante de Operações + 1 de Compliance + 1 de Comercial</div>
+          <div class="item-detail">As 3 áreas que criam e atualizam documentos · ~3h de workshop</div>
+        </td>
+        <td class="item-why">Workshop de curadoria: decidir versões conflitantes e definir processo de versionamento futuro — sem isso, o RAG degrada em meses</td>
+        <td><span class="urgency urg-agendar">Agendar</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- DADOS -->
+<div class="section sec-data">
+  <div class="section-header">
+    <span class="section-icon">📊</span>
+    <span class="section-title">Dados e informações</span>
+    <span class="section-count">2 itens · ambos no Dia 3</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:90px">Quando</th>
+        <th>O que</th>
+        <th>Para quê</th>
+        <th style="width:90px">Prioridade</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="day-badge">Dia 3</span></td>
+        <td>
+          <div class="item-name">Lista dos 45 atendentes</div>
+          <div class="item-detail">Com tempo de casa e especialidade de atendimento</div>
+        </td>
+        <td class="item-why">Seleção criteriosa dos 6–8 a entrevistar — priorizar os mais experientes e com maior variedade de escopo</td>
+        <td><span class="urgency urg-importante">Importante</span></td>
+      </tr>
+      <tr>
+        <td><span class="day-badge">Dia 3</span></td>
+        <td>
+          <div class="item-name">Volume de chamados por categoria</div>
+          <div class="item-detail">Prazos, frete, devoluções, reclamações — últimos 3–6 meses</div>
+        </td>
+        <td class="item-why">Cruzar com o mapa temático da Intent para estimar relevância operacional dos documentos catalogados</td>
+        <td><span class="urgency urg-importante">Importante</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="alert">
+  <div class="alert-title">⚠ Risco: Governança Documental</div>
+  Se a NovaTech não tiver processo de atualização documental claro, o assistente vai começar a
+  dar respostas erradas em poucos meses — mesmo que o MVP funcione bem no lançamento.
+  Isso precisa entrar no escopo como requisito não-funcional, não como "fase 2".
+  O comprometimento das 3 áreas no Dia 9 é o momento de endereçar isso.
+</div>
+
+<div class="footer">
+  [RASCUNHO — revisar antes de compartilhar com NovaTech] · DB1 Global Software · Projeto: Assistente de IA NovaTech · 2026-06-06
+</div>
+
+</body>
+</html>
